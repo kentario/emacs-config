@@ -1,0 +1,8 @@
+;;;  android.el	
+;;;  
+;;;  David Wuertele	Thu Mar 31 13:01:09 2011
+
+;;;  Steal This Program!!!
+
+(provide 'ant)
+;;; ant.el ends here

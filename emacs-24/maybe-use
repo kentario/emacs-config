@@ -1,0 +1,57 @@
+;; use-ediff-instead.el
+;;
+;; This emacs lisp snippet should be placed in your .emacs.el file in
+;; order to use the ediff package instead of emerge for git-mergetool.
+;; Ediff has more whiz-bang features, but unfortunately it doesn't
+;; integrate well with shell scripts that try to invoke ediff from an
+;; emacs shell invocation.  This script tries to address these problems.
+
+(defun ediff-write-merge-buffer ()
+  (let ((file ediff-merge-store-file))
+    (set-buffer ediff-buffer-C)
+    (write-region (point-min) (point-max) file)
+    (message "Merge buffer saved in: %s" file)
+    (set-buffer-modified-p nil)
+    (sit-for 1)))
+
+(defun ediff-abort ()
+  "Abort the ediff session without a non-zero exit status"
+  (interactive)
+  (kill-emacs 1))
+
+(defun ediff-setup-abort ()
+  (define-key ediff-mode-map "x" 'ediff-abort))
+
+(defun emerge-files-command ()
+  (let ((file-a (nth 0 command-line-args-left))
+	(file-b (nth 1 command-line-args-left))
+	(file-out (nth 2 command-line-args-left)))
+    (setq command-line-args-left (nthcdr 3 command-line-args-left))
+    (setq ediff-quit-hook 'kill-emacs
+	  ediff-quit-merge-hook 'ediff-write-merge-buffer
+	  ediff-keymap-setup-hook 'ediff-setup-abort)
+    (ediff-merge-files file-a file-b  nil file-out)))
+
+(defun emerge-files-with-ancestor-command ()
+  (let (file-a file-b file-anc file-out)
+    ;; check for a -a flag, for filemerge compatibility
+    (if (string= (car command-line-args-left) "-a")
+	;; arguments are "-a ancestor file-a file-b file-out"
+	(progn
+	  (setq file-a (nth 2 command-line-args-left))
+	  (setq file-b (nth 3 command-line-args-left))
+	  (setq file-anc (nth 1 command-line-args-left))
+	  (setq file-out (nth 4 command-line-args-left))
+	  (setq command-line-args-left (nthcdr 5 command-line-args-left)))
+        ;; arguments are "file-a file-b ancestor file-out"
+        (setq file-a (nth 0 command-line-args-left))
+        (setq file-b (nth 1 command-line-args-left))
+        (setq file-anc (nth 2 command-line-args-left))
+        (setq file-out (nth 3 command-line-args-left))
+        (setq command-line-args-left (nthcdr 4 command-line-args-left)))
+    (setq ediff-quit-hook 'kill-emacs
+	  ediff-quit-merge-hook 'ediff-write-merge-buffer
+	  ediff-keymap-setup-hook 'ediff-setup-abort)
+    (ediff-merge-files-with-ancestor file-a file-b file-anc nil file-out)))
+
+;; End of use-ediff-instead.el
