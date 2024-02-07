@@ -1,48 +1,37 @@
-;;;  .emacs		This .emacs should work for ANY type of emacs.
-;;;  
-;;;  David Wuertele	Tue Feb 22 17:43:31 1994
+(menu-bar-mode -1)
+(set-scroll-bar-mode 'right)
+(tool-bar-mode -1)
+(blink-cursor-mode -1)
 
-;;;  Steal This Program!!!
+(column-number-mode 1)
+(indent-according-to-mode)
+(display-time)
 
-(setq startup-dir (format "~/lib/emacs-%s" emacs-major-version))
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-enabled-themes '(modus-vivendi)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
 
-(setq load-path (append load-path (list startup-dir)))
+ ;; Additions made by Kentaro Wuertele
+ '(show-paren-match ((t (:background "MediumBlue" :box (:line-width (-1 . -1) :color "white" :style nil)))))
+ ; '(region ((t (:background "#103050" :box (:line-width (-1 . -1) :color "grey15")))))
+ '(region ((t (:background "grey15"))))
+ '(mode-line ((t (:box (:line-width 1 :color "red")))))
+ )
 
-(load "startup-full.el")
-
-(defun xr () (interactive) (call-process "/usr/bin/xrandr" nil nil "--output" "HDMI-A-0" "--mode" "2560x1440"))
-
-;; ;; remote scp access
-;; (require 'tramp)
-;; ;(setq tramp-default-method "scp")
-;; (setq tramp-default-method "ssh")
-
-;; (setq tramp-hosts '(("modelbee" . "/ssh:dwuertele@modelbee.teslamotors.com:/home/dwuertele/")
-;; 		    ("dfwi"   . "/ssh:tesla@10.32.10.10:/home/tesla/")
-;; 		    ("fwi5"   . "/ssh:root@10.35.57.55:/home/tesla/")
-;; 		    ("fwi6"   . "/ssh:tesla@10.35.57.56:/home/tesla/")
-;; 		    ("fwi7"   . "/ssh:tesla@10.35.57.57:/home/tesla/")
-;; 		    ("fwi64"  . "/ssh:tesla@10.35.57.64:/home/tesla/")
-;; 		    ("fwi65"  . "/ssh:tesla@10.35.57.65:/home/tesla/")
-;; 		    ("duclab" . "/ssh:tesla@10.32.10.11:/home/tesla/")
-;; 		    ("paragt" . "/ssh:tesla@10.32.10.12:/home/tesla/")
-;; 		    ("parago" . "/ssh:root@10.32.10.12:/home/tesla/")
-;; 		    ("jx01d"  . "/ssh:dwuertele@jx01.dev.tesla:/home/dwuertele")
-;; 		    ("jx01"   . "/ssh:dwuertele@jx01:/home/dwuertele")
-;; 		    ("dcid"   . "/ssh:root@192.168.90.100:/")
-;; 		    ("ncm1"   . "/ssh:tesla@10.34.109.199:/")
-;; 		    ("fwi63"  . "/ssh:tesla@10.35.57.63:/")
-;; ))
+(global-set-key (kbd "C-x C-e") 'compile)
+(global-set-key (kbd "C-x '") 'next-error)
+(global-set-key (kbd "C-x O") (lambda () (interactive) (other-window -1)))
 
 (setq explicit-shell-file-name "/bin/bash")
-
-(setenv "PAGER" "/bin/cat")
+(setenv "Pager" "/bin/cat")
 (setenv "LFS" "/mnt/lfs")
 (server-start)
 (setenv "EDITOR" "emacsclient")
-
-(find-file "~")
-
-;;; Local Variables:
-;;; mode:lisp-interaction
-;;; End:
