@@ -37,40 +37,26 @@
 (use-package flycheck-inline
   :ensure t)
 
-(use-package lsp-mode
-  :ensure t)
-
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-enabled-themes '(spacemacs-dark))
+ '(custom-enabled-themes '(kentaro-deeper-blue))
  '(custom-safe-themes
-   '("bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default))
+   '("3e871c64dcc7510c818f6e63d1442de6c41537a4d40e9040e2e7e7c218e79503" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default))
  '(fancy-splash-image "~/emacs-butterfly.svg")
  '(package-selected-packages
-   '(quick-peek spacemacs-theme flycheck-inline lsp-mode use-package flycheck smex)))
+   '(quick-peek spacemacs-theme flycheck-inline use-package flycheck smex)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
-;; '(flycheck-inline-error ((t (:foreground "Red1" :weight extrabold))))
-;; '(flycheck-inline-info ((t (:foreground "SeaGreen2"))))
-;; '(flycheck-inline-warning ((t (:foreground "Yellow"))))
-;; '(font-lock-comment-delimiter-face ((t (:foreground "peru"))))
-;; '(font-lock-comment-face ((t (:foreground "peru"))))
-;; '(font-lock-keyword-face ((t (:foreground "light sea green"))))
-;; '(font-lock-preprocessor-face ((t (:foreground "CornFlowerBlue"))))
-;; '(font-lock-type-face ((t (:foreground "SteelBlue1"))))
-;; '(isearch ((t (:foreground "white" :background "#2f822f" :weight bold))))
-;; '(lazy-highlight ((t (:foreground "#8ae4f2" :background "#004065"))))
-;; '(mode-line ((t (:box (:line-width 1 :color "red")))))
- ;; '(show-paren-mismatch ((t (:background "DarkRed"))))
  )
 
+;; Allows flycheck to display error messages with a horizontal bar around them.
 (with-eval-after-load 'flycheck
   (add-hook 'flycheck-mode-hook #'flycheck-inline-mode)
   (with-eval-after-load 'quick-peek
@@ -91,11 +77,11 @@
 (global-set-key (kbd "C-x '") 'next-error)
 (global-set-key (kbd "C-x \"") 'previous-error)
 (global-set-key (kbd "C-x O") (lambda () (interactive) (other-window -1)))
+(global-set-key (kbd "C-x C-/") 'comment-region)
+(global-set-key (kbd "C-x C-\\") 'uncomment-region)
 
 (setq explicit-shell-file-name "/bin/bash")
 (setenv "Pager" "/bin/cat")
 (setenv "LFS" "/mnt/lfs")
 (server-start)
 (setenv "EDITOR" "emacsclient")
-
-;; Deeper-blue nice color is goldenrod
