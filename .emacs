@@ -44,7 +44,7 @@
  ;; If there is more than one, they won't work right.
  '(custom-enabled-themes '(kentaro-deeper-blue))
  '(custom-safe-themes
-   '("3e871c64dcc7510c818f6e63d1442de6c41537a4d40e9040e2e7e7c218e79503" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default))
+   '("8966037be0ad554bbc8ceda50bb752493a711266e1e3562b23b462dd97cb6236" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default))
  '(fancy-splash-image "~/emacs-butterfly.svg")
  '(package-selected-packages
    '(quick-peek spacemacs-theme flycheck-inline use-package flycheck smex)))
