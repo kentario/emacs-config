@@ -45,7 +45,7 @@
  '(custom-enabled-themes '(kentaro-deeper-blue))
  '(custom-safe-themes
    '("8966037be0ad554bbc8ceda50bb752493a711266e1e3562b23b462dd97cb6236" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default))
- '(fancy-splash-image "~/emacs-butterfly.svg")
+ '(fancy-splash-image "~/lib/emacs-butterfly.svg")
  '(package-selected-packages
    '(quick-peek spacemacs-theme flycheck-inline use-package flycheck smex)))
 
@@ -79,6 +79,7 @@
 (global-set-key (kbd "C-x O") (lambda () (interactive) (other-window -1)))
 (global-set-key (kbd "C-x C-/") 'comment-region)
 (global-set-key (kbd "C-x C-\\") 'uncomment-region)
+(global-set-key (kbd "C-x %") (lambda () (interactive) (enlarge-window -1)))
 
 (setq explicit-shell-file-name "/bin/bash")
 (setenv "Pager" "/bin/cat")
