@@ -1,88 +1,49 @@
-(menu-bar-mode -1)
-(set-scroll-bar-mode 'right)
-(tool-bar-mode -1)
-(blink-cursor-mode -1)
+;;;  .emacs		This .emacs should work for ANY type of emacs.
+;;;  
+;;;  David Wuertele	Tue Feb 22 17:43:31 1994
 
-(column-number-mode 1)
-(indent-according-to-mode)
-(display-time)
+;;;  Steal This Program!!!
 
-(ido-mode 1)
-;; Don't jump to a different directory when creating a new file, or mistyping a filename.
-(setq ido-auto-merge-work-directories-length -1)
+(setq startup-dir (format "~/lib/emacs-%s" emacs-major-version))
 
-;; Initialize package.el
-(require 'package)
-(add-to-list 'package-archives
-	     '("melpa" . "https://melpa.org/packages/") t)
-(package-initialize)
+(setq load-path (append load-path (list startup-dir)))
 
-;; Load use-package
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
-(eval-when-compile (require 'use-package))
-(setq use-package-always-ensure t) ; Ensure all packages are installed by default
+(load "startup-full.el")
 
-(use-package smex
-  :ensure t)
+(defun xr () (interactive) (call-process "/usr/bin/xrandr" nil nil "--output" "HDMI-A-0" "--mode" "2560x1440"))
 
-(use-package flycheck
-  :ensure t
-  :init (global-flycheck-mode))
+;; ;; remote scp access
+;; (require 'tramp)
+;; ;(setq tramp-default-method "scp")
+;; (setq tramp-default-method "ssh")
 
-(use-package quick-peek
-  :ensure t)
-
-(use-package flycheck-inline
-  :ensure t)
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-enabled-themes '(kentaro-deeper-blue))
- '(custom-safe-themes
-   '("8966037be0ad554bbc8ceda50bb752493a711266e1e3562b23b462dd97cb6236" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default))
- '(fancy-splash-image "~/lib/emacs-butterfly.svg")
- '(package-selected-packages
-   '(quick-peek spacemacs-theme flycheck-inline use-package flycheck smex)))
-
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
-
-;; Allows flycheck to display error messages with a horizontal bar around them.
-(with-eval-after-load 'flycheck
-  (add-hook 'flycheck-mode-hook #'flycheck-inline-mode)
-  (with-eval-after-load 'quick-peek
-    (setq flycheck-inline-display-function
-	  (lambda (msg pos err)
-            (let* ((ov (quick-peek-overlay-ensure-at pos))
-		   (contents (quick-peek-overlay-contents ov)))
-              (setf (quick-peek-overlay-contents ov)
-                    (concat contents (when contents "\n") msg))
-              (quick-peek-update ov)))
-	  flycheck-inline-clear-function #'quick-peek-hide)))
-
-(global-set-key (kbd "C-x p") 'flycheck-previous-error)
-(global-set-key (kbd "C-x n") 'flycheck-next-error)
-
-(global-set-key (kbd "M-x") 'smex)
-(global-set-key (kbd "C-x C-e") 'compile)
-(global-set-key (kbd "C-x '") 'next-error)
-(global-set-key (kbd "C-x \"") 'previous-error)
-(global-set-key (kbd "C-x O") (lambda () (interactive) (other-window -1)))
-(global-set-key (kbd "C-x C-/") 'comment-region)
-(global-set-key (kbd "C-x C-\\") 'uncomment-region)
-(global-set-key (kbd "C-x %") (lambda () (interactive) (enlarge-window -1)))
+;; (setq tramp-hosts '(("modelbee" . "/ssh:dwuertele@modelbee.teslamotors.com:/home/dwuertele/")
+;; 		    ("dfwi"   . "/ssh:tesla@10.32.10.10:/home/tesla/")
+;; 		    ("fwi5"   . "/ssh:root@10.35.57.55:/home/tesla/")
+;; 		    ("fwi6"   . "/ssh:tesla@10.35.57.56:/home/tesla/")
+;; 		    ("fwi7"   . "/ssh:tesla@10.35.57.57:/home/tesla/")
+;; 		    ("fwi64"  . "/ssh:tesla@10.35.57.64:/home/tesla/")
+;; 		    ("fwi65"  . "/ssh:tesla@10.35.57.65:/home/tesla/")
+;; 		    ("duclab" . "/ssh:tesla@10.32.10.11:/home/tesla/")
+;; 		    ("paragt" . "/ssh:tesla@10.32.10.12:/home/tesla/")
+;; 		    ("parago" . "/ssh:root@10.32.10.12:/home/tesla/")
+;; 		    ("jx01d"  . "/ssh:dwuertele@jx01.dev.tesla:/home/dwuertele")
+;; 		    ("jx01"   . "/ssh:dwuertele@jx01:/home/dwuertele")
+;; 		    ("dcid"   . "/ssh:root@192.168.90.100:/")
+;; 		    ("ncm1"   . "/ssh:tesla@10.34.109.199:/")
+;; 		    ("fwi63"  . "/ssh:tesla@10.35.57.63:/")
+;; ))
 
 (setq explicit-shell-file-name "/bin/bash")
-(setenv "Pager" "/bin/cat")
+
+(setenv "PAGER" "/bin/cat")
 (setenv "LFS" "/mnt/lfs")
 (server-start)
 (setenv "EDITOR" "emacsclient")
+
+
+(find-file "~")
+
+;;; Local Variables:
+;;; mode:lisp-interaction
+;;; End:

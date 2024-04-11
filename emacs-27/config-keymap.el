@@ -16,6 +16,8 @@
 (global-set-key [C-M-prior] (lambda () (interactive) (scroll-right 20)))
 (global-set-key "" 'font-lock-fontify-buffer)
 
+(global-set-key (kbd "C-x O") (lambda () (interactive) (other-window -1)))
+
 (global-set-key [mouse-5] (lambda () (interactive) (scroll-up 1)))
 (global-set-key [mouse-4] (lambda () (interactive) (scroll-down 1)))
 
