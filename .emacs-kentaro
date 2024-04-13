@@ -11,6 +11,8 @@
 ;; Don't jump to a different directory when creating a new file, or mistyping a filename.
 (setq ido-auto-merge-work-directories-length -1)
 
+(require 'dired)
+
 ;; Initialize package.el
 (require 'package)
 (add-to-list 'package-archives
