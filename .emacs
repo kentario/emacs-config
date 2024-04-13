@@ -38,6 +38,10 @@
 (use-package flycheck-inline
   :ensure t)
 
+;; Opening a new buffers will be opened in the current window.
+(add-to-list 'load-path "packages/current-window-only")
+(current-window-only-mode)
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
