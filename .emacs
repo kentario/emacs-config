@@ -22,19 +22,8 @@
   (package-refresh-contents)
   (package-install 'use-package))
 (eval-when-compile (require 'use-package))
+
 (setq use-package-always-ensure t) ; Ensure all packages are installed by default
-
-;; Install or upgrade quelpa
-(if (package-installed-p 'quelpa)
-    (quelpa-self-upgrade)
-  (with-temp-buffer
-    (url-insert-file-contents "https://raw.githubusercontent.com/quelpa/quelpa/master/quelpa.el")
-    (eval-buffer)
-    (quelpa-self-upgrade)))
-
-(quelpa '(current-window-only
-	  :fetcher git
-	  :url "https://github.com/FrostyX/current-window-only.git"))
 
 (use-package smex
   :ensure t)
