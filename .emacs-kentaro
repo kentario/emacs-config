@@ -11,8 +11,6 @@
 ;; Don't jump to a different directory when creating a new file, or mistyping a filename.
 (setq ido-auto-merge-work-directories-length -1)
 
-(require 'dired)
-
 ;; Initialize package.el
 (require 'package)
 (add-to-list 'package-archives
@@ -88,3 +86,23 @@
 (setenv "LFS" "/mnt/lfs")
 (server-start)
 (setenv "EDITOR" "emacsclient")
+
+(setq dired-listing-switches "-AFltg")
+
+(add-hook 'dired-load-hook
+	  (function (lambda ()
+		      (load "dired-x")
+		      )))
+
+(setq dired-guess-shell-alist-user
+      (list (list "\\.jpg\\'" "/usr/X11R6/bin/xv");; fixed rule
+            (list "\\.pdf\\'" "/usr/bin/acroread");; fixed rule
+              ;; possibly more rules ...
+              (list "\\.bar\'";; rule with condition test
+                    '(if condition
+                          "BAR-COMMAND-1"
+                        "BAR-COMMAND-2"))))
+
+(require 'dired)
+(require 'epa-dired)
+
