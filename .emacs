@@ -24,27 +24,17 @@
 (eval-when-compile (require 'use-package))
 (setq use-package-always-ensure t) ; Ensure all packages are installed by default
 
-;; Bootstrap quelpa
-(unless (package-installed-p 'quelpa)
+;; Install or upgrade quelpa
+(if (package-installed-p 'quelpa)
+    (quelpa-self-upgrade)
   (with-temp-buffer
     (url-insert-file-contents "https://raw.githubusercontent.com/quelpa/quelpa/master/quelpa.el")
     (eval-buffer)
     (quelpa-self-upgrade)))
 
-;; Allows usage of the quelpa handler of use-package.
-(quelpa
- '(quelpa-use-package
-   :fetcher git
-   :url "https://github.com/quelpa/quelpa-use-package.git"))
-(require 'quelpa-use-package)
-
-;; Makes opening new buffers happen in the current window.
-(use-package current-window-only
-  :quelpa (current-window-only
-           :fetcher github
-           :repo "FrostyX/current-window-only")
-  :config
-  (current-window-only-mode))
+(quelpa '(current-window-only
+	  :fetcher git
+	  :url "https://github.com/FrostyX/current-window-only.git"))
 
 (use-package smex
   :ensure t)
