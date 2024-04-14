@@ -38,9 +38,18 @@
 (use-package flycheck-inline
   :ensure t)
 
-;; Opening a new buffers will be opened in the current window.
-(add-to-list 'load-path "packages/current-window-only")
-(current-window-only-mode)
+;; Eventually this will not be needed as vc-use-package has been merged into emacs.
+(unless (package-installed-p 'vc-use-package)
+  (package-vc-install "https://github.com/slotThe/vc-use-package"))
+
+(require 'vc-use-package)
+
+;; Makes opening new buffers happen in the current window.
+(use-package current-window-only
+  :vc (current-window-only
+       :fetcher github
+       :repo "FrostyX/current-window-only")
+  :config (current-window-only-mode))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -52,7 +61,9 @@
    '("8966037be0ad554bbc8ceda50bb752493a711266e1e3562b23b462dd97cb6236" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default))
  '(fancy-splash-image "~/lib/emacs-butterfly.svg")
  '(package-selected-packages
-   '(quick-peek spacemacs-theme flycheck-inline use-package flycheck smex)))
+   '(quick-peek spacemacs-theme flycheck-inline use-package flycheck smex))
+ '(package-vc-selected-packages
+   '((vc-use-package :vc-backend Git :url "https://github.com/slotThe/vc-use-package"))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
