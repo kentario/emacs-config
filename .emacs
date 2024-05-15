@@ -85,9 +85,6 @@
               (quick-peek-update ov)))
 	  flycheck-inline-clear-function #'quick-peek-hide)))
 
-(global-set-key (kbd "C-x p") 'flycheck-previous-error)
-(global-set-key (kbd "C-x n") 'flycheck-next-error)
-
 (global-set-key (kbd "M-x") 'smex)
 (global-set-key (kbd "C-x C-e") 'compile)
 (global-set-key (kbd "C-x '") 'next-error)
