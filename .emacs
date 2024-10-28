@@ -4,6 +4,9 @@
 (blink-cursor-mode -1)
 
 (column-number-mode 1)
+(global-display-line-numbers-mode 1)
+(setq display-line-numbers-type 'absolute)
+
 (indent-according-to-mode)
 (display-time)
 
@@ -37,19 +40,6 @@
 
 (use-package flycheck-inline
   :ensure t)
-
-;; Eventually this will not be needed as vc-use-package has been merged into emacs.
-(unless (package-installed-p 'vc-use-package)
-  (package-vc-install "https://github.com/slotThe/vc-use-package"))
-
-(require 'vc-use-package)
-
-;; Makes opening new buffers happen in the current window.
-;;(use-package current-window-only
-;;  :vc (current-window-only
-;;       :fetcher github
-;;       :repo "FrostyX/current-window-only")
-;;  :config (current-window-only-mode))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
