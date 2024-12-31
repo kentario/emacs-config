@@ -4,8 +4,7 @@
 (blink-cursor-mode -1)
 
 (column-number-mode 1)
-(global-display-line-numbers-mode 1)
-(setq display-line-numbers-type 'absolute)
+(global-display-line-numbers-mode -1)
 
 (indent-according-to-mode)
 (display-time)
@@ -41,6 +40,17 @@
 (use-package flycheck-inline
   :ensure t)
 
+(use-package exec-path-from-shell
+  :ensure t)
+(when (memq window-system '(mac ns x))
+  (exec-path-from-shell-initialize))
+
+(use-package rust-mode
+  :ensure t)
+
+(use-package flycheck-rust
+  :ensure t)
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -51,9 +61,9 @@
    '("8966037be0ad554bbc8ceda50bb752493a711266e1e3562b23b462dd97cb6236" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default))
  '(fancy-splash-image "~/lib/emacs-butterfly.svg")
  '(flycheck-clang-args nill)
- '(flycheck-gcc-args "-c++=20")
+ '(flycheck-gcc-args "-std=c++20")
  '(package-selected-packages
-   '(quick-peek spacemacs-theme flycheck-inline use-package flycheck smex))
+   '(flycheck-rust quick-peek spacemacs-theme flycheck-inline use-package flycheck smex))
  '(package-vc-selected-packages
    '((vc-use-package :vc-backend Git :url "https://github.com/slotThe/vc-use-package"))))
 
@@ -64,17 +74,27 @@
  ;; If there is more than one, they won't work right.
  )
 
+;; Rust stuff
+(add-hook 'rust-mode-hook
+	  (lambda ()
+	    (setq indent-tabs-mode nil)
+	    (flycheck-mode)
+	    (flycheck-rust-setup)
+	    ))
+
+(setq rust-format-on-save t)
+
 ;; Allows flycheck to display error messages with a horizontal bar around them.
 (with-eval-after-load 'flycheck
   (add-hook 'flycheck-mode-hook #'flycheck-inline-mode)
   (with-eval-after-load 'quick-peek
     (setq flycheck-inline-display-function
 	  (lambda (msg pos err)
-            (let* ((ov (quick-peek-overlay-ensure-at pos))
+	    (let* ((ov (quick-peek-overlay-ensure-at pos))
 		   (contents (quick-peek-overlay-contents ov)))
-              (setf (quick-peek-overlay-contents ov)
-                    (concat contents (when contents "\n") msg))
-              (quick-peek-update ov)))
+	      (setf (quick-peek-overlay-contents ov)
+		    (concat contents (when contents "\n") msg))
+	      (quick-peek-update ov)))
 	  flycheck-inline-clear-function #'quick-peek-hide)))
 
 (global-set-key (kbd "C-x p") 'flycheck-previous-error)
@@ -105,12 +125,12 @@
 
 (setq dired-guess-shell-alist-user
       (list (list "\\.jpg\\'" "/usr/X11R6/bin/xv");; fixed rule
-            (list "\\.pdf\\'" "/usr/bin/acroread");; fixed rule
-              ;; possibly more rules ...
-              (list "\\.bar\'";; rule with condition test
-                    '(if condition
-                          "BAR-COMMAND-1"
-                        "BAR-COMMAND-2"))))
+	    (list "\\.pdf\\'" "/usr/bin/acroread");; fixed rule
+	    ;; possibly more rules ...
+	    (list "\\.bar\'";; rule with condition test
+                  '(if condition
+                       "BAR-COMMAND-1"
+                     "BAR-COMMAND-2"))))
 
 (require 'dired)
 (require 'epa-dired)
@@ -239,15 +259,15 @@ Otherwise, one argument `-i' is passed to the shell.
 			    (generate-new-buffer-name "*shell*")))
 	   (if (file-remote-p default-directory)
 	       ;; It must be possible to declare a local default-directory.
-               ;; FIXME: This can't be right: it changes the default-directory
-               ;; of the current-buffer rather than of the *shell* buffer.
+	       ;; FIXME: This can't be right: it changes the default-directory
+	       ;; of the current-buffer rather than of the *shell* buffer.
 	       (setq default-directory
 		     (expand-file-name
 		      (read-directory-name
 		       "Default directory: " default-directory default-directory
 		       t nil))))))))
   (setq buffer (if (or buffer (not (derived-mode-p 'shell-mode))
-                       (comint-check-proc (current-buffer)))
+		       (comint-check-proc (current-buffer)))
                    (get-buffer-create (or buffer "*shell*"))
                  ;; If the current buffer is a dead shell buffer, use it.
                  (current-buffer)))
@@ -257,16 +277,16 @@ Otherwise, one argument `-i' is passed to the shell.
       ;; Apply connection-local variables.
       (hack-connection-local-variables-apply
        `(:application tramp
-         :protocol ,(file-remote-p default-directory 'method)
-         :user ,(file-remote-p default-directory 'user)
-         :machine ,(file-remote-p default-directory 'host)))
+		      :protocol ,(file-remote-p default-directory 'method)
+		      :user ,(file-remote-p default-directory 'user)
+		      :machine ,(file-remote-p default-directory 'host)))
 
       ;; On remote hosts, the local `shell-file-name' might be useless.
       (if (and (called-interactively-p 'any)
-               (null explicit-shell-file-name)
-               (null (getenv "ESHELL")))
+	       (null explicit-shell-file-name)
+	       (null (getenv "ESHELL")))
           (set (make-local-variable 'explicit-shell-file-name)
-               (file-local-name
+	       (file-local-name
 		(expand-file-name
                  (read-file-name
                   "Remote shell path: " default-directory shell-file-name
@@ -285,10 +305,10 @@ Otherwise, one argument `-i' is passed to the shell.
       (unless (file-exists-p startfile)
         (setq startfile (concat user-emacs-directory "init_" name ".sh")))
       (apply 'make-comint-in-buffer "shell" buffer prog
-             (if (file-exists-p startfile) startfile)
-             (if (and xargs-name (boundp xargs-name))
+	     (if (file-exists-p startfile) startfile)
+	     (if (and xargs-name (boundp xargs-name))
                  (symbol-value xargs-name)
-               '("-i")))
+	       '("-i")))
       (shell-mode)))
   buffer)
 
