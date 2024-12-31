@@ -13,10 +13,9 @@
 ;; Don't jump to a different directory when creating a new file, or mistyping a filename.
 (setq ido-auto-merge-work-directories-length -1)
 
-;; Initialize package.el
+;; Package management
 (require 'package)
-(add-to-list 'package-archives
-	     '("melpa" . "https://melpa.org/packages/") t)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (package-initialize)
 
 ;; Load use-package
@@ -97,9 +96,10 @@
 	      (quick-peek-update ov)))
 	  flycheck-inline-clear-function #'quick-peek-hide)))
 
+
+;; Keybindings
 (global-set-key (kbd "C-x p") 'flycheck-previous-error)
 (global-set-key (kbd "C-x n") 'flycheck-next-error)
-(setq flycheck-gcc-args "-std=c++20")
 
 (global-set-key (kbd "M-x") 'smex)
 (global-set-key (kbd "C-x C-e") 'compile)
