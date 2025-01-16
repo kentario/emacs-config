@@ -50,6 +50,15 @@
 (use-package flycheck-rust
   :ensure t)
 
+(use-package pdf-tools
+  :ensure t)
+
+(use-package auctex
+  :ensure t)
+
+(use-package cdlatex
+  :ensure t)
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -62,7 +71,7 @@
  '(flycheck-clang-args nill)
  '(flycheck-gcc-args "-std=c++20")
  '(package-selected-packages
-   '(flycheck-rust quick-peek spacemacs-theme flycheck-inline use-package flycheck smex))
+   '(cdlatex auctex flycheck-rust quick-peek spacemacs-theme flycheck-inline use-package flycheck smex))
  '(package-vc-selected-packages
    '((vc-use-package :vc-backend Git :url "https://github.com/slotThe/vc-use-package"))))
 
@@ -96,19 +105,40 @@
 	      (quick-peek-update ov)))
 	  flycheck-inline-clear-function #'quick-peek-hide)))
 
+;; PDF Tools setup
+(setq TeX-view-program-selection '((output-pdf "PDF Tools")))
+(setq TeX-view-program-list '(("PDF Tools" TeX-pdf-tools-sync-view)))
+
+;; Auto-revert PDF buffers when the PDF file changes on disk
+(add-hook 'TeX-after-compilation-finished-functions #'TeX-revert-document-buffer)
+
+;; Enable PDF sync support (forward/backward search)
+(setq TeX-source-correlate-mode t)
+(setq TeX-source-correlate-start-server t)
+
+;; LaTeX stuff
+(setq TeX-auto-save t)
+(setq TeX-parse-self t)
+
+
 
 ;; Keybindings
 (global-set-key (kbd "C-x p") 'flycheck-previous-error)
 (global-set-key (kbd "C-x n") 'flycheck-next-error)
 
 (global-set-key (kbd "M-x") 'smex)
-(global-set-key (kbd "C-x C-e") 'compile)
 (global-set-key (kbd "C-x '") 'next-error)
 (global-set-key (kbd "C-x \"") 'previous-error)
 (global-set-key (kbd "C-x O") (lambda () (interactive) (other-window -1)))
 (global-set-key (kbd "C-x C-/") 'comment-region)
 (global-set-key (kbd "C-x C-\\") 'uncomment-region)
 (global-set-key (kbd "C-x %") (lambda () (interactive) (enlarge-window -1)))
+
+(global-set-key (kbd "C-x C-e") 'compile)
+;; Special handling for emacs-lisp mode
+(add-hook 'emacs-lisp-mode-hook
+	  (lambda ()
+	    (local-set-key (kbd "C-x C-e") 'eval-last-sexp)))
 
 (setq explicit-shell-file-name "/bin/bash")
 (setenv "Pager" "/bin/cat")
