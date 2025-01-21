@@ -120,7 +120,29 @@
 (setq TeX-auto-save t)
 (setq TeX-parse-self t)
 
+;; Automatically insert braces when typing ^ or _
+(setq TeX-electric-sub-and-superscript t)
 
+;; Enable prettify-symbols mode in LaTeX buffers.
+;; Enable TeX-fold-mode in LaTeX buffers. https://www.gnu.org/software/auctex/manual/auctex/Folding.html
+;; This also makes it so that whenever typing a "}" or "$" the stuff that I just typed will be folded.
+
+(add-hook 'LaTeX-mode-hook
+	  (lambda ()
+	    (prettify-symbols-mode)
+	    (TeX-fold-mode 1)
+	    (turn-on-cdlatex)
+	    (add-hook 'find-file-hook #'TeX-fold-buffer t t)
+	    (add-hook 'after-change-functions
+		      (lambda (start end oldlen)
+			(when (= (- end start) 1)
+			  (let ((char-point
+				 (buffer-substring-no-properties
+				  start end)))
+			    (when (or (string= char-point "}")
+				      (string= char-point "$"))
+			      (TeX-fold-paragraph)))))
+		      t t)))
 
 ;; Keybindings
 (global-set-key (kbd "C-x p") 'flycheck-previous-error)
