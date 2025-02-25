@@ -116,6 +116,11 @@
 (setq TeX-source-correlate-mode t)
 (setq TeX-source-correlate-start-server t)
 
+;; Allow previewing of TikZ figures with AUCTeX
+(eval-after-load "preview"
+  '(add-to-list 'preview-default-preamble "\\PreviewEnvironment{tikzpicture}" t)
+  )
+
 ;; LaTeX stuff
 (setq TeX-auto-save t)
 (setq TeX-parse-self t)
@@ -133,16 +138,17 @@
 	    (TeX-fold-mode 1)
 	    (turn-on-cdlatex)
 	    (add-hook 'find-file-hook #'TeX-fold-buffer t t)
-	    (add-hook 'after-change-functions
-		      (lambda (start end oldlen)
-			(when (= (- end start) 1)
-			  (let ((char-point
-				 (buffer-substring-no-properties
-				  start end)))
-			    (when (or (string= char-point "}")
-				      (string= char-point "$"))
-			      (TeX-fold-paragraph)))))
-		      t t)))
+	    ;; (add-hook 'after-change-functions
+	    ;; 	      (lambda (start end oldlen)
+	    ;; 		(when (= (- end start) 1)
+	    ;; 		  (let ((char-point
+	    ;; 			 (buffer-substring-no-properties
+	    ;; 			  start end)))
+	    ;; 		    (when (or (string= char-point "}")
+	    ;; 			      (string= char-point "$"))
+	    ;; 		      (TeX-fold-paragraph)))))
+	    ;; 	      t t)))
+	    ))
 
 ;; Keybindings
 (global-set-key (kbd "C-x p") 'flycheck-previous-error)
