@@ -15,6 +15,7 @@
 
 ;; Package management
 (require 'package)
+(setq package-enable-at-startup nil)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (package-initialize)
 
@@ -22,7 +23,7 @@
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
-(eval-when-compile (require 'use-package))
+(require 'use-package)
 
 (setq use-package-always-ensure t) ; Ensure all packages are installed by default
 
@@ -39,16 +40,52 @@
 (use-package flycheck-inline
   :ensure t)
 
-(use-package exec-path-from-shell
-  :ensure t)
-(when (memq window-system '(mac ns x))
-  (exec-path-from-shell-initialize))
+(use-package which-key
+  :ensure t
+  :config
+  (which-key-setup-side-window-right)
+  (setq which-key-idle-secondary-delay 0.05)
+  (which-key-mode))
+
+;; From https://emacs-lsp.github.io/lsp-mode/page/installation/, under the section Vanilla Emacs
+(use-package lsp-mode
+  :ensure t
+  :init
+  ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
+  (setq lsp-keymap-prefix "C-c l")
+  :hook ((c++-mode . lsp)
+	 (c-mode . lsp)
+         ;; if you want which-key integration
+         (lsp-mode . lsp-enable-which-key-integration))
+  :commands lsp
+  :config
+  (setq lsp-clients-clangd-args '(
+				  "-j=4"
+				  "--header-insertion-decorators=0"
+				  "--clang-tidy"
+				  "--background-index"
+				  "-log=verbose")))
+
+(use-package lsp-ui
+  :ensure t
+  :commands lsp-ui-mode
+  :after lsp-mode
+  :config
+  (setq lsp-ui-doc-enable t)
+  (setq lsp-ui-doc-position 'at-point)
+  (setq lsp-ui-sideline-enable t)
+  (setq lsp-ui-sideline-show-diagnostics t))
 
 (use-package rust-mode
   :ensure t)
 
 (use-package flycheck-rust
   :ensure t)
+
+(use-package exec-path-from-shell
+  :ensure t)
+(when (memq window-system '(mac ns x))
+  (exec-path-from-shell-initialize))
 
 (use-package pdf-tools
   :ensure t)
@@ -69,7 +106,7 @@
    '("8966037be0ad554bbc8ceda50bb752493a711266e1e3562b23b462dd97cb6236" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default))
  '(fancy-splash-image "~/lib/emacs-butterfly.svg")
  '(package-selected-packages
-   '(cdlatex auctex flycheck-rust quick-peek spacemacs-theme flycheck-inline use-package flycheck smex))
+   '(lsp-ui lsp-mode cdlatex auctex flycheck-rust quick-peek spacemacs-theme flycheck-inline use-package flycheck smex))
  '(package-vc-selected-packages
    '((vc-use-package :vc-backend Git :url "https://github.com/slotThe/vc-use-package"))))
 
