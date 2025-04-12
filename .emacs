@@ -68,8 +68,6 @@
  '(custom-safe-themes
    '("8966037be0ad554bbc8ceda50bb752493a711266e1e3562b23b462dd97cb6236" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default))
  '(fancy-splash-image "~/lib/emacs-butterfly.svg")
- '(flycheck-clang-args nill)
- '(flycheck-gcc-args "-std=c++20")
  '(package-selected-packages
    '(cdlatex auctex flycheck-rust quick-peek spacemacs-theme flycheck-inline use-package flycheck smex))
  '(package-vc-selected-packages
@@ -81,6 +79,13 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+;; C++ stuff
+(add-hook 'c++-mode-hook
+          (lambda ()
+            (setq flycheck-clang-language-standard "c++20")
+            (setq flycheck-gcc-language-standard "c++20")
+            ))
 
 ;; Rust stuff
 (add-hook 'rust-mode-hook
