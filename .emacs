@@ -40,6 +40,9 @@
 (use-package flycheck-inline
   :ensure t)
 
+(with-eval-after-load 'flycheck
+  (add-hook 'flycheck-mode-hook #'flycheck-inline-mode))
+
 (use-package which-key
   :ensure t
   :config
@@ -59,8 +62,8 @@
          (lsp-mode . lsp-enable-which-key-integration))
   :commands lsp
   :config
-  (setq lsp-clients-clangd-args '(
-				  "-j=4"
+  (setq lsp-prefer-flymake nil)
+  (setq lsp-clients-clangd-args '("-j=4"
 				  "--header-insertion-decorators=0"
 				  "--clang-tidy"
 				  "--background-index"
