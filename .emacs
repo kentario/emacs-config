@@ -9,7 +9,7 @@
  '(custom-safe-themes
    '("8966037be0ad554bbc8ceda50bb752493a711266e1e3562b23b462dd97cb6236" default))
  '(package-selected-packages
-   '(which-key use-package smex rust-mode rainbow-delimiters quick-peek pdf-tools lsp-ui flycheck-rust flycheck-inline exec-path-from-shell cdlatex auctex)))
+   '(counsel conusel diminish ivy which-key use-package smex rust-mode rainbow-delimiters quick-peek pdf-tools lsp-ui flycheck-rust flycheck-inline exec-path-from-shell cdlatex auctex)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -50,3 +50,26 @@
   (package-install 'use-package))
 (require 'use-package)
 (setq use-package-always-ensure t)
+
+;; Make it possible to hide minor modes, so as to avoid clutter in the mode line.
+(use-package diminish
+  :ensure t)
+
+(use-package ivy
+  :ensure t
+  :diminish
+  :bind (("C-s" . swiper)
+	 :map ivy-minibuffer-map
+	 ("TAB" . ivy-alt-done))
+  :config
+  (ivy-mode))
+
+(use-package counsel
+  :ensure t
+  :diminish
+  :config
+  (counsel-mode))
+
+(use-package swiper
+  :ensure t
+  :diminish)
