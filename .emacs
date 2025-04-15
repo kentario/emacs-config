@@ -15,8 +15,11 @@
 
 ;; Theme
 (load-theme 'kentaro-deeper-blue)
+(setq fancy-splash-image "~/lib/emacs-butterfly.svg");
 
+;; Don't make shell jump around.
 (setq comint-scroll-show-maximum-output nil)
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
