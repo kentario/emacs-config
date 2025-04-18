@@ -105,26 +105,16 @@
 (defhydra hydra-zoom ()
   "zoom"
   ("n" text-scale-increase "in")
-  ("t" text-scale-decrease "out"))
-
-(defhydra hydra-zoom (global-map "<f2>")
-  "zoom"
-  ("g" text-scale-increase "in")
-  ("l" text-scale-decrease "out"))
-
-(defhydra hydra-zoom ()
-  "zoom"
-  ("n" text-scale-increase "in")
   ("t" text-scale-decrease "out")
   ("RET" nil "done" :exit t))
 (global-set-key (kbd "C-<return>") 'hydra-zoom/body)
 
-(defhydra hydra-move (:color amaranth :pre (set-cursor-color "#e52b50") :post (set-cursor-color "green"))
+(defhydra hydra-move (:foreign-keys warn :pre (set-cursor-color "#e52b50") :post (set-cursor-color "green"))
   "move"
-  ("e" forward-char)
-  ("s" backward-char)
   ("n" next-line)
   ("t" previous-line)
+  ("e" forward-char)
+  ("s" backward-char)
   ("i" forward-word)
   ("r" backward-word)
   ("a" move-beginning-of-line)
@@ -134,11 +124,16 @@
   ("d" kill-region "cut")
   ("y" yank "yank")
   ("/" undo "undo")
-  ("RET" nil "done" :exit t))
+  ("g" nil "done" :exit t))
+(global-set-key  prog-mode-map (kbd "C-z") 'hydra-move/body)
 
-(global-set-key (kbd "C-z") 'hydra-move/body)
+(defhydra hydra-minibuffer-move ()
+  ("n" ivy-next-line "next")
+  ("t" ivy-previous-line "prev")
+  ("g" nil "stop" :exit t))
+(define-key ivy-minibuffer-map (kbd "C-z") 'hydra-minibuffer-move/body)
 
-(defhydra hydra-buffer-menu (:color pink
+(defhydra hydra-buffer-menu (:foreign-keys run pink
                              :hint nil)
   "
 ^Mark^             ^Unmark^           ^Actions^          ^Search
