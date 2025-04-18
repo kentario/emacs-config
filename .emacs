@@ -120,20 +120,21 @@
   ("a" move-beginning-of-line)
   ("o" move-end-of-line)
   ("SPC" set-mark-command "mark")
+  ("m" (deactivate-mark t) "deactivate mark")
   ("w" kill-ring-save "copy")
   ("d" kill-region "cut")
   ("y" yank "yank")
   ("/" undo "undo")
   ("g" nil "done" :exit t))
-(global-set-key  prog-mode-map (kbd "C-z") 'hydra-move/body)
+(global-set-key (kbd "C-c C-,") 'hydra-move/body)
 
 (defhydra hydra-minibuffer-move ()
   ("n" ivy-next-line "next")
   ("t" ivy-previous-line "prev")
   ("g" nil "stop" :exit t))
-(define-key ivy-minibuffer-map (kbd "C-z") 'hydra-minibuffer-move/body)
+(define-key ivy-minibuffer-map (kbd "C-c C-,") 'hydra-minibuffer-move/body)
 
-(defhydra hydra-buffer-menu (:foreign-keys run pink
+(defhydra hydra-buffer-menu (:foreign-keys run
                              :hint nil)
   "
 ^Mark^             ^Unmark^           ^Actions^          ^Search
