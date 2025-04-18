@@ -1,5 +1,3 @@
-;; 36:44
-
 ;;; .emacs --- Initialization file for Emacs
 ;;; Commentary: Emacs Startup File --- initialization for Emacs
 
@@ -11,7 +9,7 @@
  '(custom-safe-themes
    '("8966037be0ad554bbc8ceda50bb752493a711266e1e3562b23b462dd97cb6236" default))
  '(package-selected-packages
-   '(ivy-rich counsel conusel diminish ivy which-key use-package smex rust-mode rainbow-delimiters quick-peek pdf-tools lsp-ui flycheck-rust flycheck-inline exec-path-from-shell cdlatex auctex)))
+   '(helpful ivy-rich counsel conusel diminish ivy which-key use-package smex rust-mode rainbow-delimiters quick-peek pdf-tools lsp-ui flycheck-rust flycheck-inline exec-path-from-shell cdlatex auctex)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -60,7 +58,7 @@
 ;; Autocompletion with ivy, counsel, and swiper.
 (use-package ivy
   :diminish
-  :bind (("C-s" . swiper)
+  :bind (([remap isearch-forward] . swiper)
 	 :map ivy-minibuffer-map
 	 ("TAB" . ivy-alt-done))
   :config
@@ -68,6 +66,7 @@
 
 (use-package counsel
   :diminish
+  :bind (("C-x b" . counsel-switch-buffer))
   :config
   (counsel-mode))
 
@@ -82,9 +81,20 @@
 
 ;; Displays the key bindings following the currently entered incomplete command.
 (use-package which-key
-  :diminish which-key-mode
+  :diminish
   :custom
   (which-key-idle-delay 0.6)
   :config
   (which-key-setup-side-window-right)
   (which-key-mode))
+
+;; An alternative to the built-in Emacs help that provides much more contextual information.
+(use-package helpful
+  :diminish
+  :bind (([remap describe-key] . helpful-key)
+	 ([remap describe-command] . helpful-command)
+	 ("C-c C-d" . helpful-at-point)
+	 ("C-c F" . helpful-function))
+  :custom
+  (counsel-describe-function-function #'helpful-callable)
+  (counsel-describe-variable-function #'helpful-variable))
