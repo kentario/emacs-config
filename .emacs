@@ -40,6 +40,7 @@
 (require 'package)
 
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+(add-to-list 'package-archives '("elpa" . "https://elpa.gnu.org/packages/") t)
 
 (package-initialize)
 (unless package-archive-contents
@@ -99,15 +100,10 @@
   (counsel-describe-function-function #'helpful-callable)
   (counsel-describe-variable-function #'helpful-variable))
 
+
+
 ;; Tie related commands into a family of short bindings with a prefix.
 (use-package hydra)
-
-(defhydra hydra-zoom ()
-  "zoom"
-  ("n" text-scale-increase "in")
-  ("t" text-scale-decrease "out")
-  ("RET" nil "done" :exit t))
-(global-set-key (kbd "C-<return>") 'hydra-zoom/body)
 
 (defhydra hydra-move (:foreign-keys warn :pre (set-cursor-color "#e52b50") :post (set-cursor-color "green"))
   "move"
@@ -126,13 +122,13 @@
   ("y" yank "yank")
   ("/" undo "undo")
   ("g" nil "done" :exit t))
-(global-set-key (kbd "C-c C-,") 'hydra-move/body)
+(global-set-key (kbd "C-<return>") 'hydra-move/body)
 
 (defhydra hydra-minibuffer-move ()
   ("n" ivy-next-line "next")
   ("t" ivy-previous-line "prev")
   ("g" nil "stop" :exit t))
-(define-key ivy-minibuffer-map (kbd "C-c C-,") 'hydra-minibuffer-move/body)
+(define-key ivy-minibuffer-map (kbd "C-<return>") 'hydra-minibuffer-move/body)
 
 (defhydra hydra-buffer-menu (:foreign-keys run
                              :hint nil)
