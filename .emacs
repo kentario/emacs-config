@@ -9,7 +9,7 @@
  '(custom-safe-themes
    '("8966037be0ad554bbc8ceda50bb752493a711266e1e3562b23b462dd97cb6236" default))
  '(package-selected-packages
-   '(general helpful ivy-rich counsel conusel diminish ivy which-key use-package smex rust-mode rainbow-delimiters quick-peek pdf-tools lsp-ui flycheck-rust flycheck-inline exec-path-from-shell cdlatex auctex)))
+   '(winum general helpful ivy-rich counsel conusel diminish ivy which-key use-package smex rust-mode rainbow-delimiters quick-peek pdf-tools lsp-ui flycheck-rust flycheck-inline exec-path-from-shell cdlatex auctex)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -100,13 +100,27 @@
   (counsel-describe-function-function #'helpful-callable)
   (counsel-describe-variable-function #'helpful-variable))
 
-
+;; Set up lsp-mode
+(use-package lsp-mode
+  :init
+  (setq lsp-keymap-prefix "C-c l")
+  :config
+  (lsp-enable-which-key-integration t))
 
 ;; Tie related commands into a family of short bindings with a prefix.
 (use-package hydra)
 
-(defhydra hydra-move (:foreign-keys warn :pre (set-cursor-color "#e52b50") :post (set-cursor-color "green"))
-  "move"
+(defhydra hydra-move (:foreign-keys warn :hint nil
+				    :pre (set-cursor-color "#e52b50")
+				    :post (set-cursor-color "green"))
+  "
+      ^^^^^^Move^^^^^^             ^Mark^                ^Actions^
+------------------------------------------------------------
+ ^ ^ ^ ^ ^   _t_   ^ ^ ^ ^ ^       _SPC_: set mark       _w_: copy
+ _a_ _r_ _s_  +  _e_ _i_ _o_       _m_  : unset mark     _d_: cut
+ ^ ^ ^ ^ ^   _n_   ^ ^ ^ ^ ^       ^ ^                   _y_: yank
+ ^ ^ ^ ^ ^   ^ ^   ^ ^ ^ ^ ^       ^ ^                   _/_: undo
+"
   ("n" next-line)
   ("t" previous-line)
   ("e" forward-char)
@@ -115,13 +129,14 @@
   ("r" backward-word)
   ("a" move-beginning-of-line)
   ("o" move-end-of-line)
-  ("SPC" set-mark-command "mark")
-  ("m" (deactivate-mark t) "deactivate mark")
-  ("w" kill-ring-save "copy")
-  ("d" kill-region "cut")
-  ("y" yank "yank")
-  ("/" undo "undo")
-  ("g" nil "done" :exit t))
+  ("SPC" set-mark-command)
+  ("m" (deactivate-mark t))
+  ("w" kill-ring-save)
+  ("d" kill-region)
+  ("y" yank)
+  ("/" undo)
+  ("g" nil "quit" :exit t)
+  ("RET" nil "quit" :exit t))
 (global-set-key (kbd "C-<return>") 'hydra-move/body)
 
 (defhydra hydra-minibuffer-move ()
@@ -130,8 +145,7 @@
   ("g" nil "stop" :exit t))
 (define-key ivy-minibuffer-map (kbd "C-<return>") 'hydra-minibuffer-move/body)
 
-(defhydra hydra-buffer-menu (:foreign-keys run
-                             :hint nil)
+(defhydra hydra-buffer-menu (:foreign-keys run :hint nil)
   "
 ^Mark^             ^Unmark^           ^Actions^          ^Search
 ^^^^^^^^-----------------------------------------------------------------
@@ -159,5 +173,27 @@ _~_: modified
   ("v" Buffer-menu-select "select" :color blue)
   ("o" Buffer-menu-other-window "other-window" :color blue)
   ("q" quit-window "quit" :color blue))
-
 (define-key Buffer-menu-mode-map "." 'hydra-buffer-menu/body)
+
+;; hydra-window --------------------------------------------
+;;
+;; hydra for managing windows
+
+(defhydra hydra-window (:hint nil)
+  "
+    ^^Move^^            ^Split
+^^^^^^----------------------------------------
+      ^_t_^             [_v_]ertical
+      ^^↑^^             [_h_]orizontal
+  _s_ ←   → _e_
+      ^^↓^^
+      ^_n_^          quit : [_SPC_]
+"
+  ("s" windmove-left)
+  ("n" windmove-down)
+  ("t" windmove-up)
+  ("e" windmove-right)
+  ("h" split-window-below)
+  ("v" split-window-right)
+  ("SPC" nil))
+(global-set-key (kbd "M-o") 'hydra-window/body)
