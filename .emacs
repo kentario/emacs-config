@@ -6,6 +6,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(auth-source-save-behavior nil)
  '(custom-safe-themes
    '("8966037be0ad554bbc8ceda50bb752493a711266e1e3562b23b462dd97cb6236" default))
  '(package-selected-packages
@@ -100,13 +101,6 @@
   (counsel-describe-function-function #'helpful-callable)
   (counsel-describe-variable-function #'helpful-variable))
 
-;; Set up lsp-mode
-(use-package lsp-mode
-  :init
-  (setq lsp-keymap-prefix "C-c l")
-  :config
-  (lsp-enable-which-key-integration t))
-
 ;; Tie related commands into a family of short bindings with a prefix.
 (use-package hydra)
 
@@ -179,13 +173,13 @@ _~_: modified
 ;;
 ;; hydra for managing windows
 
-(defhydra hydra-window (:hint nil)
+(defhydra hydra-window (:foreign-keys warn :hint nil)
   "
-    ^^Move^^            ^Split
-^^^^^^----------------------------------------
-      ^_t_^             [_v_]ertical
-      ^^↑^^             [_h_]orizontal
-  _s_ ←   → _e_
+    ^^Move^^            ^Actions^
+^^^^^^----------------------------------
+      ^_t_^             [_v_]ertical split
+      ^^↑^^             [_h_]orizontal split
+  _s_ ←   → _e_         [_d_]elete window
       ^^↓^^
       ^_n_^          quit : [_SPC_]
 "
@@ -195,5 +189,34 @@ _~_: modified
   ("e" windmove-right)
   ("h" split-window-below)
   ("v" split-window-right)
+  ("d" delete-window)
   ("SPC" nil))
 (global-set-key (kbd "M-o") 'hydra-window/body)
+
+;; Temp flycheck stuff
+(use-package flycheck
+  :ensure t
+  :init (global-flycheck-mode))
+(use-package quick-peek
+  :ensure t)
+(use-package flycheck-inline
+  :ensure t)
+(with-eval-after-load 'flycheck
+  (add-hook 'flycheck-mode-hook #'flycheck-inline-mode))
+(add-hook 'c++-mode-hook
+          (lambda ()
+            (setq flycheck-clang-language-standard "c++20")
+            (setq flycheck-gcc-language-standard "c++20")
+            ))
+
+(with-eval-after-load 'flycheck
+  (add-hook 'flycheck-mode-hook #'flycheck-inline-mode)
+  (with-eval-after-load 'quick-peek
+    (setq flycheck-inline-display-function
+	  (lambda (msg pos err)
+	    (let* ((ov (quick-peek-overlay-ensure-at pos))
+		   (contents (quick-peek-overlay-contents ov)))
+	      (setf (quick-peek-overlay-contents ov)
+		    (concat contents (when contents "\n") msg))
+	      (quick-peek-update ov)))
+	  flycheck-inline-clear-function #'quick-peek-hide)))
