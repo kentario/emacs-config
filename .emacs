@@ -8,9 +8,11 @@
  ;; If there is more than one, they won't work right.
  '(auth-source-save-behavior nil)
  '(custom-safe-themes
-   '("8966037be0ad554bbc8ceda50bb752493a711266e1e3562b23b462dd97cb6236" default))
+   '("8966037be0ad554bbc8ceda50bb752493a711266e1e3562b23b462dd97cb6236"
+     default))
  '(package-selected-packages
-   '(winum general helpful ivy-rich counsel conusel diminish ivy which-key use-package smex rust-mode rainbow-delimiters quick-peek pdf-tools lsp-ui flycheck-rust flycheck-inline exec-path-from-shell cdlatex auctex)))
+   '(counsel diminish flycheck flycheck-inline helpful hydra ivy-rich
+	     quick-peek)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -100,6 +102,10 @@
   :custom
   (counsel-describe-function-function #'helpful-callable)
   (counsel-describe-variable-function #'helpful-variable))
+
+(defalias 'calc-eval-region
+   (kmacro "M-w C-x * q C-y <return> SPC = SPC C-y"))
+(global-set-key (kbd "C-x c") 'calc-eval-region)
 
 ;; Tie related commands into a family of short bindings with a prefix.
 (use-package hydra)
