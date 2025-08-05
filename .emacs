@@ -139,14 +139,13 @@
   ("d" kill-region)
   ("y" yank)
   ("/" undo)
-  ("g" nil "quit" :exit t)
-  ("RET" nil "quit" :exit t))
+  ("g" nil "quit"))
 (global-set-key (kbd "C-<return>") 'hydra-move/body)
 
 (defhydra hydra-minibuffer-move ()
   ("n" ivy-next-line "next")
   ("t" ivy-previous-line "prev")
-  ("g" nil "stop" :exit t))
+  ("g" nil "cancel"))
 (define-key ivy-minibuffer-map (kbd "C-<return>") 'hydra-minibuffer-move/body)
 
 (defhydra hydra-buffer-menu (:foreign-keys run :hint nil)
@@ -191,7 +190,7 @@ _~_: modified
       ^^↑^^             [_h_]orizontal split
   _s_ ←   → _e_         [_d_]elete window
       ^^↓^^
-      ^_n_^          quit : [_SPC_]
+      ^_n_^
 "
   ("s" windmove-left)
   ("n" windmove-down)
@@ -200,7 +199,7 @@ _~_: modified
   ("h" split-window-below)
   ("v" split-window-right)
   ("d" delete-window)
-  ("SPC" nil))
+  ("g" nil "quit"))
 (global-set-key (kbd "M-o") 'hydra-window/body)
 
 ;; Temp flycheck stuff
