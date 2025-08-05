@@ -105,7 +105,7 @@
 
 (defalias 'calc-eval-region
    (kmacro "M-w C-x * q C-y <return> SPC = SPC C-y"))
-(global-set-key (kbd "C-x c") 'calc-eval-region)
+(global-set-key (kbd "C-c r") 'calc-eval-region)
 
 ;; Tie related commands into a family of short bindings with a prefix.
 (use-package hydra)
