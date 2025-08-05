@@ -39,22 +39,26 @@
 ;; Don't make shell jump around.
 (setq comint-scroll-show-maximum-output nil)
 
-;; Initialize package sources
-(require 'package)
+;; Set up straight.el
+;; straight.el bootstrap
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name
+        "straight/repos/straight.el/bootstrap.el"
+        (or (bound-and-true-p straight-base-dir)
+            user-emacs-directory)))
+      (bootstrap-version 7))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
 
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-(add-to-list 'package-archives '("elpa" . "https://elpa.gnu.org/packages/") t)
-
-(package-initialize)
-(unless package-archive-contents
-  (package-refresh-contents))
-
-;; Initialize use-package
-(unless (package-installed-p 'use-package)
-  (package-install 'use-package))
-(require 'use-package)
-;; Make it so that I don't have to use :ensure t for every package.
-(setq use-package-always-ensure t)
+(setq straight-use-package-by-default t)
+(straight-use-package 'use-package)
 
 ;; Make it possible to hide minor modes, so as to avoid clutter in the mode line.
 (use-package diminish)
@@ -201,12 +205,12 @@ _~_: modified
 
 ;; Temp flycheck stuff
 (use-package flycheck
-  :ensure t
+  :straight t
   :init (global-flycheck-mode))
 (use-package quick-peek
-  :ensure t)
+  :straight t)
 (use-package flycheck-inline
-  :ensure t)
+  :straight t)
 (with-eval-after-load 'flycheck
   (add-hook 'flycheck-mode-hook #'flycheck-inline-mode))
 (add-hook 'c++-mode-hook
