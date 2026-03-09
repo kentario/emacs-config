@@ -199,8 +199,12 @@ _~_: modified
   ("h" split-window-below)
   ("v" split-window-right)
   ("d" delete-window)
-  ("g" nil "quit"))
+  ("SPC" nil "quit"))
 (global-set-key (kbd "M-o") 'hydra-window/body)
+
+;; Typescript/Javascript
+(use-package typescript-mode
+  :straight t)
 
 ;; Temp flycheck stuff
 (use-package flycheck
@@ -228,3 +232,15 @@ _~_: modified
 		    (concat contents (when contents "\n") msg))
 	      (quick-peek-update ov)))
 	  flycheck-inline-clear-function #'quick-peek-hide)))
+
+(use-package atomic-chrome
+  :demand t
+  :straight (atomic-chrome
+             :repo "KarimAziev/atomic-chrome"
+             :type git
+             :host github)
+  :commands (atomic-chrome-start-server)
+  :config
+  (setq-default atomic-chrome-extension-type-list '(atomic-chrome))
+  (setq atomic-chrome-buffer-open-style 'frame)
+  (atomic-chrome-start-server))
