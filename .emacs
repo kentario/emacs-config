@@ -57,7 +57,9 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
+;; Use straight by default, don't need :straight t.
 (setq straight-use-package-by-default t)
+;; Install use-package with straight.el
 (straight-use-package 'use-package)
 
 ;; Make it possible to hide minor modes, so as to avoid clutter in the mode line.
@@ -202,9 +204,14 @@ _~_: modified
   ("SPC" nil "quit"))
 (global-set-key (kbd "M-o") 'hydra-window/body)
 
-;; Typescript/Javascript
-(use-package typescript-mode
-  :straight t)
+(use-package treesit-auto
+  :custom
+  (treesit-auto-install 'prompt)
+  :config
+  (global-treesit-auto-mode))
+
+(use-package nix-ts-mode
+  :mode "\\.nix\\'")
 
 ;; Temp flycheck stuff
 (use-package flycheck
