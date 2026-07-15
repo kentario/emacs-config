@@ -208,10 +208,17 @@ _~_: modified
   :custom
   (treesit-auto-install 'prompt)
   :config
+  (add-to-list 'treesit-language-source-alist
+               '(typst "https://github.com/uben0/tree-sitter-typst"))
+  (treesit-auto-add-to-auto-mode-alist 'all)
   (global-treesit-auto-mode))
+
+(add-to-list 'auto-mode-alist '("\\.tpp\\'" . c++-ts-mode))
 
 (use-package nix-ts-mode
   :mode "\\.nix\\'")
+(use-package typst-ts-mode
+  :mode "\\.typst\\'")
 
 ;; Temp flycheck stuff
 (use-package flycheck
