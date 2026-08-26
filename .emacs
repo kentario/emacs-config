@@ -32,6 +32,10 @@
 (indent-according-to-mode)
 (display-time)
 
+;; Enable certain disabled commands
+(put 'downcase-region 'disabled nil)
+(put 'upcase-region 'disabled nil)
+
 ;; Theme
 (load-theme 'kentaro-deeper-blue)
 (setq fancy-splash-image "~/lib/emacs-butterfly.svg")
@@ -232,8 +236,8 @@ _~_: modified
   (add-hook 'flycheck-mode-hook #'flycheck-inline-mode))
 (add-hook 'c++-mode-hook
           (lambda ()
-            (setq flycheck-clang-language-standard "c++20")
-            (setq flycheck-gcc-language-standard "c++20")))
+            (setq flycheck-clang-language-standard "c++23")
+            (setq flycheck-gcc-language-standard "c++23")))
 
 (with-eval-after-load 'flycheck
   (add-hook 'flycheck-mode-hook #'flycheck-inline-mode)
