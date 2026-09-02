@@ -1,6 +1,10 @@
 ;;; .emacs --- Initialization file for Emacs
 ;;; Commentary: Emacs Startup File --- initialization for Emacs
 
+;;BIND M-p and M-n
+;;to C-p C-l
+;;and C-n C-l
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
