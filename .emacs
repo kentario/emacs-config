@@ -1,9 +1,7 @@
 ;;; .emacs --- Initialization file for Emacs
 ;;; Commentary: Emacs Startup File --- initialization for Emacs
 
-;;BIND M-p and M-n
-;;to C-p C-l
-;;and C-n C-l
+;;; Code:
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -266,3 +264,19 @@ _~_: modified
   (setq-default atomic-chrome-extension-type-list '(atomic-chrome))
   (setq atomic-chrome-buffer-open-style 'frame)
   (atomic-chrome-start-server))
+
+;; Setting custom keybinds:
+(defun previous-line-recenter ()
+  "Move to the previous line, then recenter the cursor to the center of the screen."
+  (interactive)
+  (forward-line -1)
+  (recenter))
+
+(defun next-line-recenter ()
+  "Move to the previous next, then recenter the cursor to the center of the screen."
+  (interactive)
+  (forward-line)
+  (recenter))
+
+(global-set-key (kbd "M-p") #'previous-line-recenter)
+(global-set-key (kbd "M-n") #'next-line-recenter)
